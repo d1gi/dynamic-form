@@ -39,14 +39,6 @@
             'comparisons' => $comparisonsGT,
             'periods' => $periods,
         ],
-        'orders_approved' => [
-            'title' => 'Оплачено заказов',
-            'type'  => 'number_with_period',
-            'quantity' => 1,
-            'default'  => 1,
-            'comparisons' => $comparisonsGT,
-            'periods' => $periods,
-        ],
         'email' => [
             'title' => 'Email',
             // Данные отправляются в виде массива, например
@@ -74,15 +66,6 @@
                 'contains'  => 'Содержит (contains)',
                 'begin'     => 'Начинается с (begin)',
                 'is_null'   => 'Пусто (is null)',
-            ],
-        ],
-        'gender' => [
-            'title' => 'Пол',
-            'type'  => 'choice',
-            'quantity' => 1,
-            'comparisons' => [
-                '1' => 'Мужской',
-                '2' => 'Женский',
             ],
         ],
         // ---------------------------------------------
@@ -272,7 +255,7 @@
     <script src="assets/bootstrap-daterangepicker/moment.js"></script>
     <script src="assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-
+</head>
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -308,7 +291,196 @@
     <div class="container">
         <form method="get">
 
-            <div class="controls" id="and_conditions"></div>
+            <!-- type = choice (is_exist) -->
+            <div class="controls" id="and_conditions">
+                <div id="criteria_2">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_2" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option selected="selected" value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+                    <div id="conditions_2" class="conditions">
+                        <select id="" class="input-xlarge" name="is_exist">
+                            <option value="0">Нет</option>
+                            <option selected="selected" value="1">Да</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div id="criteria_3">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_3" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option selected="selected" value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+                    <div id="conditions_3" class="conditions">
+                        <select id="3tagsname_modifier" class="input-medium">
+                            <option value="tags_include">Включая</option>
+                            <option selected="selected" value="tags_exclude">Исключая</option>
+                        </select>
+                        <select class="input-large" name="tags_exclude_comparison">
+                            <option value="and">Каждый из указанных (and)</option>
+                            <option value="or">Любой из указанных (or)</option>
+                        </select>
+                        <input id="3tags" class="select2-input input-xxlarge" type="text" value="4,7" autocomplete="on" name="tags_exclude">
+                    </div>
+                </div>
+
+                <!-- type = number_with_period (orders_created) -->
+                <div id="criteria_4">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_4" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option selected="selected" value="orders_created">Создано заказов</option>
+                        <option value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+                    <div id="conditions_4" class="conditions">
+                        <select class="input-xlarge" name="orders_created_comparison">
+                            <option value="gt">Больше (gt)</option>
+                            <option selected="selected" value="gte">Больше или равно (gte)</option>
+                            <option value="lt">Меньше (lt)</option>
+                            <option value="lte">Меньше или равно (lte)</option>
+                            <option value="eq">Равно (eq)</option>
+                        </select>
+                        <input type="number" required="required" value="3" name="orders_created">
+                        <select class="input-xlarge" name="orders_created_period">
+                            <option value="all">За всё время</option>
+                            <option value="1w">За последнюю неделю</option>
+                            <option selected="selected" value="2w">За последние две недели</option>
+                            <option value="1m">За последний месяц</option>
+                            <option value="2m">За последние два месяца</option>
+                            <option value="3m">За последние три месяца</option>
+                            <option value="6m">За последние полгода</option>
+                            <option value="1y">За последний год</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- type = string (name) -->
+                <div id="criteria_5">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_5" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option value="email">Email</option>
+                        <option selected="selected" value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+                    <div id="conditions_5" class="conditions">
+                        <select class="input-xlarge" name="name_comparison">
+                            <option value="is">Полное соответсвие (is)</option>
+                            <option selected="selected" value="contains">Содержит (contains)</option>
+                            <option value="begin">Начинается с (begin)</option>
+                            <option value="is_null">Пусто (is null)</option>
+                        </select>
+                        <input type="text" value="ва" name="name">
+                    </div>
+                </div>
+
+                <!-- type = array (email)-->
+                <div id="criteria_6">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_6" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option selected="selected" value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+
+                    <div id="conditions_6" class="conditions">
+                        <select class="input-xlarge" name="email[6][comparison]">
+                            <option value="contains">Содержит (contains)</option>
+                            <option value="not_contains">Не содержит (not_contains)</option>
+                            <option value="begin">Начинается с (begin)</option>
+                            <option selected="selected" value="not_begin">Не начинается с (not_begin)</option>
+                            <option value="end">Кончается (end)</option>
+                            <option value="not_end">Не кончается (not_end)</option>
+                            <option value="is">Является (is)</option>
+                            <option value="not_is">Не является (not_is)</option>
+                        </select>
+                        <input type="text" value="admin@" name="email[6][value]">
+                    </div>
+                </div>
+                <div id="criteria_7">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_7" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option selected="selected" value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option value="birth_date">Возраст</option>
+                    </select>
+
+                    <div id="conditions_7" class="conditions">
+                        <select class="input-xlarge" name="email[7][comparison]">
+                            <option selected="selected" value="contains">Содержит (contains)</option>
+                            <option value="not_contains">Не содержит (not_contains)</option>
+                            <option value="begin">Начинается с (begin)</option>
+                            <option value="not_begin">Не начинается с (not_begin)</option>
+                            <option value="end">Кончается (end)</option>
+                            <option value="not_end">Не кончается (not_end)</option>
+                            <option value="is">Является (is)</option>
+                            <option value="not_is">Не является (not_is)</option>
+                        </select>
+                        <input type="text" value="as" name="email[7][value]">
+                    </div>
+                </div>
+
+                <!-- type = date_with_range (birth_date) -->
+                <div id="criteria_8">
+                    <button class="btn btn-danger btn-mini remove" title="Удалить" type="button"><b>x</b></button>
+                    <select id="field_7" class="input-large" name="">
+                        <option value="0">Выберите условие...</option>
+                        <option value="is_exist">Существует</option>
+                        <option value="orders_created">Создано заказов</option>
+                        <option value="email">Email</option>
+                        <option value="name">Имя</option>
+                        <option value="tags">Тэги</option>
+                        <option value="countries">Страны</option>
+                        <option selected="selected" value="birth_date">Возраст</option>
+                    </select>
+
+                    <div id="conditions_8" class="conditions">
+                        <select class="input-xlarge" name="birth_date_comparison">
+                            <option value="age_gt">Старше (age_gt)</option>
+                            <option value="age_gte">Старше или равно (age_gte)</option>
+                            <option value="age_lt">Младше (age_lt)</option>
+                            <option value="age_lte">Младше или равно (age_lte)</option>
+                            <option value="age_eq">Равно (age_eq)</option>
+                            <option selected="selected" value="range">Диапазон дат рождения (range)</option>
+                        </select>
+                        <input type="text" required="required" value="1990-01-01 - 2000-01-01" name="birth_date">
+                    </div>
+                </div>
+            </div>
 
             <div class="controls">
                 <button id="button_add_and_condition" class="btn btn-info btn-mini" type="button" style="margin-top: 6px; margin-bottom: 16px;">
@@ -427,9 +599,15 @@
             });
         }
 
+
         $('#button_add_and_condition').click(function() {
             alert('@todo');
         });
+
+
+        // Demo data
+        MultiAutoComplete('#3tags', 'Выбор тэгов', tags);
+        assignDaterangepicker('birth_date', false);
 
     </script>
 </body>

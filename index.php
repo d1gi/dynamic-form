@@ -25,16 +25,47 @@
         'is_exist' => [
             'title' => 'Существует',
             'type'  => 'choice',
-            'quantity' => 1, // Допускается только одно такое условие в форме.
             'comparisons' => [
                 '1' => 'Да',
                 '0' => 'Нет',
             ],
         ],
+        'is_buyer' => [
+            'title' => 'Покупатель',
+            'type'  => 'choice',
+            'comparisons' => [
+                '1' => 'Да',
+                '0' => 'Нет',
+            ],
+        ],
+        'gender' => [
+            'title' => 'Пол',
+            'type'  => 'choice',
+            'comparisons' => [
+                '1' => 'Мужской',
+                '2' => 'Женский',
+            ],
+        ],
+        'name' => [
+            'title' => 'Имя',
+            'type'  => 'string',
+            'comparisons' => [
+                'is'        => 'Полное соответсвие (is)',
+                'contains'  => 'Содержит (contains)',
+                'begin'     => 'Начинается с (begin)',
+                'is_null'   => 'Пусто (is null)',
+            ],
+        ],
         'orders_created' => [
             'title' => 'Создано заказов',
             'type'  => 'number_with_period',
-            'quantity' => 1,
+            'default'  => 1,
+            'comparisons' => $comparisonsGT,
+            'periods' => $periods,
+        ],
+        'clicks' => [
+            'title' => 'Кликал',
+            'type'  => 'number_with_period',
             'default'  => 1,
             'comparisons' => $comparisonsGT,
             'periods' => $periods,
@@ -45,7 +76,6 @@
             // ?email[2][comparison]=contains&email[2][value]=admin&email[3][comparison]=not_contains&email[3][value]=hi
             'input_name' => 'array',
             'type'  => 'string',
-            'quantity' => 'multiple', // Может быть множество условий
             'comparisons' => [
                 'contains'      => 'Содержит (contains)',
                 'not_contains'  => 'Не содержит (not_contains)',
@@ -57,72 +87,38 @@
                 'not_is'        => 'Не является (not_is)',
             ],
         ],
-        'name' => [
-            'title' => 'Имя',
-            'type'  => 'string',
-            'quantity' => 'multiple',
-            'comparisons' => [
-                'is'        => 'Полное соответсвие (is)',
-                'contains'  => 'Содержит (contains)',
-                'begin'     => 'Начинается с (begin)',
-                'is_null'   => 'Пусто (is null)',
-            ],
-        ],
         // ---------------------------------------------
         'tags' => [
             'title' => 'Тэги',
-            'type'  => 'multiselect', // Данные берутся из переменной tags
-            'name_modifier' => [
-                'tags_include' => 'Включая',
-                'tags_exclude' => 'Исключая',
+            'type'  => 'multiselect', // Основное поле ввода с применением либы Select2.
+            'name_modifier' => [ // Кол-во условий в случае применения
+                'include' => 'Включая',
+                'exclude' => 'Исключая',
             ],
             'quantity' => 2,
             'comparisons' => [
                 'and' => 'Каждый из указанных (and)',
                 'or'  => 'Любой из указанных (or)',
             ],
-            'data'  => 'tags',
+            'data'  => 'tags', // Данные берутся из переменной tags
             'hint'  => 'Выбор тэгов',
-        ],
-        'tags_include' => [ // это мутные костылики ;))
-            'modified_for' => 'tags',
-            'modifier' => 'tags_include',
-        ],
-        'tags_exclude' => [
-            'modified_for' => 'tags',
-            'modifier' => 'tags_exclude',
-        ],
-        'tags_include_comparison' => [
-            'parent' => 'tags',
-        ],
-        'tags_exclude_comparison' => [
-            'parent' => 'tags',
         ],
         // ---------------------------------------------
         'countries' => [
             'title' => 'Страны',
             'type'  => 'ajax', // Данные берутся из аякс запроса.
             'name_modifier' => [
-                'countries_include' => 'Включая',
-                'countries_exclude' => 'Исключая',
+                'include' => 'Включая',
+                'exclude' => 'Исключая',
             ],
-            'quantity' => 1,
+            'quantity' => 1, // Фильтр по странам может быть только один т.к. они не могут пересекаться.
             'url'   => 'countries.php',
             'hint'  => 'Поиск стран по первым символам',
-        ],
-        'countries_include' => [
-            'modified_for' => 'countries',
-            'modifier' => 'countries_include',
-        ],
-        'countries_exclude' => [
-            'modified_for' => 'countries',
-            'modifier' => 'countries_exclude',
         ],
         // ---------------------------------------------
         'birth_date' => [
             'title' => 'Возраст',
             'type'  => 'date_with_range', // Использовать функцию assignDaterangepicker():
-            'quantity' => 1,
             'default'  => 25, //'1990-01-01',
             'comparisons' => [
                 'age_gt'  => 'Старше (age_gt)',

@@ -25,7 +25,7 @@
         'is_exist' => [
             'title' => 'Существует',
             'type'  => 'choice',
-            'comparisons' => [
+            'choices' => [
                 '1' => 'Да',
                 '0' => 'Нет',
             ],
@@ -33,7 +33,7 @@
         'is_buyer' => [
             'title' => 'Покупатель',
             'type'  => 'choice',
-            'comparisons' => [
+            'choices' => [
                 '1' => 'Да',
                 '0' => 'Нет',
             ],
@@ -41,7 +41,7 @@
         'gender' => [
             'title' => 'Пол',
             'type'  => 'choice',
-            'comparisons' => [
+            'choices' => [
                 '1' => 'Мужской',
                 '2' => 'Женский',
             ],

@@ -40,20 +40,31 @@
         ],
         'gender' => [
             'title' => 'Пол',
-            'type'  => 'choice',
-            'choices' => [
-                '1' => 'Мужской',
-                '2' => 'Женский',
+            'type' => 'choice',
+            'fields' => [
+                'select' => [
+                    '1' => 'Мужской',
+                    '2' => 'Женский',
+                ],
             ],
         ],
-        'name' => [
+        'username' => [
             'title' => 'Имя',
-            'type'  => 'string',
-            'comparisons' => [
-                'is'        => 'Полное соответсвие (is)',
-                'contains'  => 'Содержит (contains)',
-                'begin'     => 'Начинается с (begin)',
-                'is_null'   => 'Пусто (is null)',
+            'fields' => [
+                [
+                    'name' => 'username_comparison',
+                    'type' => 'select',
+                    'select' => [
+                        'is'        => 'Полное соответсвие (is)',
+                        'contains'  => 'Содержит (contains)',
+                        'begin'     => 'Начинается с (begin)',
+                        'is_null'   => 'Пусто (is null)',
+                    ],
+                ],
+                [
+                    'name' => 'username',
+                    'type' => 'string',
+                ],
             ],
         ],
         'orders_created' => [
@@ -128,6 +139,190 @@
                 'age_eq'  => 'Равно (age_eq)',
                 //'age_range' => 'Диапазон возрастов (age_range)',
                 'range' => 'Диапазон дат рождения (range)',
+            ],
+        ],
+    ];
+
+    $conditions_2 = [
+        [
+            'title' => 'Существует',
+            'fields' => [
+                [
+                    'name' => 'is_exist',
+                    'type' => 'select',
+                    'options' => [
+                        '1' => 'Да',
+                        '0' => 'Нет',
+                    ],
+                ],
+            ],
+        ],
+        [
+            'title' => 'Пол',
+            'fields' => [
+                [
+                    'name' => 'gender',
+                    'type' => 'select',
+                    'options' => [
+                        '1' => 'Мужской',
+                        '2' => 'Женский',
+                    ],
+                ],
+            ],
+        ],
+        [
+            'title' => 'Имя',
+            'fields' => [
+                [
+                    'name' => 'username_comparison',
+                    'type' => 'select',
+                    'options' => [
+                        'is'        => 'Полное соответсвие (is)',
+                        'contains'  => 'Содержит (contains)',
+                        'begin'     => 'Начинается с (begin)',
+                        'is_null'   => 'Пусто (is null)',
+                    ],
+                ],
+                [
+                    'name' => 'username',
+                    'type' => 'text',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Создано заказов',
+            'fields' => [
+                [
+                    'name' => 'orders_created_comparison',
+                    'type' => 'select',
+                    'options' => $comparisonsGT,
+                ],
+                [
+                    'name' => 'orders_created',
+                    'type' => 'text',
+                    'default'  => 1, // Значение по умолчанию.
+                ],
+                [
+                    'name' => 'orders_created_period',
+                    'type' => 'select',
+                    'options' => $periods,
+                ],
+            ],
+        ],
+        [
+            'title' => 'Email',
+            'quantity' => 'multiple', // Может быть произвольное кол-во условий
+            // Данные отправляются в виде массива, например:
+            // ?email[2][comparison]=contains&email[2][value]=admin&email[3][comparison]=not_contains&email[3][value]=hi
+            'fields' => [
+                [
+                    // Здесь вместо {condition_id} подставляется любое число, например порядковый номер условия, который генерируется автоматически...
+                    'name' => 'email[{condition_id}][comparison]',
+                    'type' => 'select',
+                    'options' => [
+                        'contains'      => 'Содержит (contains)',
+                        'not_contains'  => 'Не содержит (not_contains)',
+                        'begin'         => 'Начинается с (begin)',
+                        'not_begin'     => 'Не начинается с (not_begin)',
+                        'end'           => 'Кончается (end)',
+                        'not_end'       => 'Не кончается (not_end)',
+                        'is'            => 'Является (is)',
+                        'not_is'        => 'Не является (not_is)',
+                    ],
+                ],
+                [
+                    'name' => 'email[{condition_id}][value]',
+                    'type' => 'text',
+                ],
+            ],
+
+        ],
+        [
+            'title' => 'Тэги',
+            'fields' => [
+                [
+                    // Внешне выглядит как обычный select, но по сути он занимается только модифицированием имён остальных полей в данном условии.
+                    'type' => 'name_modifier',
+                    'options' => [
+                        'tags_include' => 'Включая',
+                        'tags_exclude' => 'Исключая',
+                    ],
+                ],
+                [
+                    // Здесь вместо {this} подставляется текущий выбранный name_modifier
+                    'name' => '{this}_comparison', // Например tags_include_comparison и tags_exclude_comparison
+                    'type' => 'select',
+                    'options' => [
+                        'and' => 'Каждый из указанных (and)',
+                        'or'  => 'Любой из указанных (or)',
+                    ],
+                ],
+                [
+                    'name' => '{this}', // Например tags_include и tags_exclude
+                    'type' => 'select2', // Используется библиотека Select2, по сути это обычный <input type="text" class="select2-input input-xxlarge" autocomplete="on">
+                    'function' => 'MultiAutoComplete', // Например будет вызвана функция: MultiAutoComplete('#3tags', 'Выбор тэгов', tags);
+                    'function_args' => ['element_id', 'placeholder', 'data'],
+                    'data' => 'tags', // Данные берутся из переменной tags, а если типа data будет массив, то подставить его в функцию.
+                    'placeholder' => 'Выбор тэгов',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Страны',
+            'quantity' => 1, // Условие по странам может быть только одно т.к. они не могут пересекаться.
+            'fields' => [
+                [
+                    'type' => 'name_modifier',
+                    'options' => [
+                        'countries_include' => 'Включая',
+                        'countries_exclude' => 'Исключая',
+                    ],
+                ],
+                [
+                    'name' => '{this}', // Например countries_include и countries_exclude
+                    // Как вариант можно вообще не использовать тип select2, а сделать вот так:
+                    'type' => 'text', // Вместо 'select2', как пример с тэгами, можно делать вот так :)
+                    'attr' => [
+                        'class' => 'select2-input input-xxlarge',
+                        'autocomplete' => 'on',
+                    ],
+                    'function' => 'MultiAjaxAutoComplete', // Например будет вызвана функция: MultiAjaxAutoComplete('#3countries', '/countries.php', 'Поиск стран по первым символам');
+                    'function_args' => ['element_id', 'url', 'placeholder'],
+                    'placeholder'   => 'Поиск стран по первым символам',
+                    'url'   => '/countries.php',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Возраст',
+            'fields' => [
+                [
+                    'name' => 'birth_date_comparison',
+                    'type' => 'select',
+                    'options' => [
+                        'age_gt'  => 'Старше (age_gt)',
+                        'age_gte' => 'Старше или равно (age_gte)',
+                        'age_lt'  => 'Младше (age_lt)',
+                        'age_lte' => 'Младше или равно (age_lte)',
+                        'age_eq'  => 'Равно (age_eq)',
+                        //'age_range' => 'Диапазон возрастов (age_range)',
+                        'range' => 'Диапазон дат рождения (range)',
+                    ],
+                    'on_change' => [
+                        // Вызвать при выборе 'range', при этом продумать момент чтобы при выборе не 'range' выставлялось значение по умолчанию, как указано в 'birth_date'
+                        'range' => [
+                            'function' => 'assignDaterangepicker;',
+                            'function_args' => ['birth_date', false],
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'name' => 'birth_date',
+                        'type' => 'text',
+                        'default'  => 25,
+                    ],
+                ],
             ],
         ],
     ];
@@ -498,6 +693,10 @@
         ];
 
         var conditions_json = <?php echo json_encode($conditions, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>
+
+
+        var conditions2_json = <?php echo json_encode($conditions_2, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>
+
 
         function MultiAutoComplete(element, placeholder, data) {
             $(element).select2({

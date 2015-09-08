@@ -175,6 +175,8 @@
     </div>
 
     <script type="text/javascript">
+        var query_string = '<?php echo $_SERVER["QUERY_STRING"]?>';
+
         var tags = [
             {id: '2', text: '222'},
             {id: '7', text: '777'},

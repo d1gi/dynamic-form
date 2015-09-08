@@ -1,13 +1,48 @@
-html,body{margin:0;padding:0;}
-body{font-family:sans-serif;}
-#buttons_panel{margin:0 auto;display:table;}
-#buttons_panel .buttons{background:#67bdd9;color:#fff;display:table;padding:10px 20px;float:left;margin:5px;cursor:pointer;
-    -webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;
-    -o-user-select: none;user-select: none;}
-#buttons_panel .buttons:hover{background:#4c6ac3;}
-#forms_panel{margin:0 auto;display:table;}
-.FieldLineContainer{clear:both;}
-.selectCondition,.lineFields{float:left;}
-
-.display-yes{display:block;}
-.display-no{display:none;}
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: sans-serif;
+}
+#buttons_panel {
+    margin: 0 auto;
+    display: table;
+}
+#buttons_panel .buttons {
+    background: #67bdd9;
+    color: #fff;
+    display: table;
+    padding: 10px 20px;
+    float: left;
+    margin: 5px;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+#buttons_panel .buttons:hover {
+    background: #4c6ac3;
+}
+#forms_panel {
+    margin: 0 auto;
+    display: table;
+}
+.FieldLineContainer {
+    clear: both;
+}
+.selectCondition,
+.lineFields {
+    float: left;
+}
+.display-yes {
+    display: block;
+}
+.display-no {
+    display: none;
+}

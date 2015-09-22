@@ -12,7 +12,6 @@
     <link href="assets/select2/select2.css" rel="stylesheet">
     <link href="assets/select2/select2-bootstrap.css" rel="stylesheet">
 
-    <!--
     <style type="text/css">
         body {
             padding-top: 60px;
@@ -82,10 +81,9 @@
             float: right;
         }
     </style>
-    -->
-
+    
     <link rel="stylesheet" type="text/css" href="assets/bootstrap-daterangepicker/daterangepicker-bs2.css">
-    <!--
+
     <style type="text/css">
         .conditions {
             display: inline;
@@ -112,7 +110,7 @@
             margin-top: -12px;
         }
     </style>
-    -->
+
     <script src="assets/jquery-1.11.2.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 
@@ -160,6 +158,12 @@
 
 <div class="container">
 
+    <div id="buttons_panel">
+        <div id="add_form_button" class="buttons">Добавить обязательное условие</div>
+        <div id="search_button" class="buttons">Поиск</div>
+    </div>
+
+<!--
     <form method="GET" id="head_form" name="headform" action="">
         <div id="forms_panel"></div>
 
@@ -175,6 +179,7 @@
         </div>
 
     </form>
+    -->
 </div>
 
 <script type="text/javascript">

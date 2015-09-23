@@ -158,9 +158,14 @@
 
 <div class="container">
 
+    <div id="forms_panel"></div>
     <div id="buttons_panel">
-        <div id="add_form_button" class="buttons">Добавить обязательное условие</div>
-        <div id="search_button" class="buttons">Поиск</div>
+        <div class="controls">
+            <div id="add_form_button" class="btn btn-info btn-mini" type="button" style="margin-top: 6px; margin-bottom: 16px;">
+                <i class="icon-plus icon-white"></i> Добавить обязательное условия
+            </div>
+        </div>
+        <button class="btn btn-primary btn-large" id="search_button"><i class="icon-search icon-white"></i> Поиск</button>
     </div>
 
 <!--

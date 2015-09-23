@@ -5,11 +5,10 @@ $(document).ready(function() {
     formLinesElement = 0;
     getStringArray = [];
 
-    //Получаем JSON
-    //formRestoreJson='{"formarray":[{"FieldLine":[{"name":"exist"},{"field_name":"is_exist","options":[{"value":"1"}]}]},{"FieldLine":[{"name":"create_order"},{"field_name":"orders_created_comparison","options":[{"value":"gt"}]},{"field_name":"orders_created","options":[{"value":"0"}]},{"field_name":"orders_created_period","options":[{"value":"all"}]}]},{"FieldLine":[{"name":"email"},{"field_name":"email_comparison","options":[{"value":"cont"}]},{"field_name":"email_value","options":[{"value":"0"}]}]},{"FieldLine":[{"name":"username"},{"field_name":"username_comparison","options":[{"value":"compliance"}]},{"field_name":"username_value","options":[{"value":"0"}]}]},{"FieldLine":[{"name":"age"},{"field_name":"age_comparison","options":[{"value":"upward"}]},{"field_name":"age_value","options":[{"value":"0"}]}]},{"FieldLine":[{"name":"tags"},{"field_name":"tags_include","options":[{"value":"include"}]},{"field_name":"tags_condotion","options":[{"value":"and"}]},{"field_name":"tags_array","options":[{"value":[{"element":"kozinaki"},{"element":"cookie"},{"element":"cheesecake"}]}]}]}]}';
-    formRestoreJson = $.getUrlVar('options').replace(/%22/g, '"');
-    console.log(formRestoreJson);
-    if (formRestoreJson != '') {
+    //Получаем JSON из GET если есть, то восстанавливаем форму
+    formRestoreJson = $.getUrlVar('options');
+    if (formRestoreJson != '' && formRestoreJson != undefined) {
+        formRestoreJson = formRestoreJson.replace(/%22/g, '"');
         formRestore = JSON.parse(formRestoreJson);
         //Восстанавливаем форму из JSON
         for (restoreElement = 0; restoreElement < formRestore.formarray.length; restoreElement++) {
@@ -23,21 +22,7 @@ $(document).ready(function() {
                     $('[value="' + formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value + '"]', this).attr("selected", "selected");
                     if ($(this).attr("name") == "age_comparison") {
                         if ($(this).val().toString() == "date_diapasone") {
-                            $('input[name="datapicker"]', $(this).parent(".lineFields")).daterangepicker({
-                                singleDatePicker: false,
-                                showDropdowns: true,
-                                format: 'YYYY-MM-DD',
-                                locale: {
-                                    applyLabel: "Применить",
-                                    cancelLabel: "Отменить",
-                                    fromLabel: "От",
-                                    toLabel: "До",
-                                    customRangeLabel: "Custom",
-                                    daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-                                    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-                                    firstDay: 1
-                                }
-                            });
+                            initDatePicker(this);
                             $('input[name="datapicker"]', $(this).parent(".lineFields")).attr("name", "data-range");
                         }
                     }
@@ -96,9 +81,9 @@ $(document).ready(function() {
             }
         }
         getForwarding += ']}';
-        console.log(getForwarding);
+        //console.log(getForwarding);
         //Кидаем на сервер
-        //location.href="test.php?json="+getForwarding;
+        location.href = "test.php?json=" + getForwarding;
     });
 
     //------------------------------------------------------------------------------------------------------------------------------------
@@ -170,24 +155,9 @@ $(document).ready(function() {
             getStringArray[thisFieldLineNumber][thisFieldLineFields] = '{"field_name":"' + form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name + '","options":[{"value":"' + $(this.domElement).val() + '"}]}';
         } else {
             getStringArray[thisFieldLineNumber][thisFieldLineFields] = '{"field_name":"' + form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name + '","options":[{"value":[{"element":"' + $(this.domElement).val().toString().replace(/,/g, '"},{"element":"') + '"}]}]}';
-            console.log(domElement);
         }
         if ($(this.domElement).val().toString() == "date_diapasone" && $(this.domElement).attr("name") == "age_comparison") {
-            $('input[name="datapicker"]', $(this.domElement).parent(".lineFields")).daterangepicker({
-                singleDatePicker: false,
-                showDropdowns: true,
-                format: 'YYYY-MM-DD',
-                locale: {
-                    applyLabel: "Применить",
-                    cancelLabel: "Отменить",
-                    fromLabel: "От",
-                    toLabel: "До",
-                    customRangeLabel: "Custom",
-                    daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-                    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-                    firstDay: 1
-                }
-            });
+            initDatePicker(this.domElement);
             $('input[name="datapicker"]', $(this.domElement).parent(".lineFields")).attr("name", "data-range");
             $('input[name="data-range"]', $(this.domElement).parent(".lineFields")).val("");
         }
@@ -197,6 +167,25 @@ $(document).ready(function() {
             $('input[name="data-range"]', $(this.domElement).parent(".lineFields")).val("");
             $('input[name="data-range"]', $(this.domElement).parent(".lineFields")).attr("name", "datapicker");
         }
+    }
+
+    function initDatePicker(domElement) {
+        this.domElement = domElement;
+        $('input[name="datapicker"]', $(this.domElement).parent(".lineFields")).daterangepicker({
+            singleDatePicker: false,
+            showDropdowns: true,
+            format: 'YYYY-MM-DD',
+            locale: {
+                applyLabel: "Применить",
+                cancelLabel: "Отменить",
+                fromLabel: "От",
+                toLabel: "До",
+                customRangeLabel: "Custom",
+                daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                firstDay: 1
+            }
+        });
     }
 
     //Объект "Выбор условия"
@@ -238,7 +227,7 @@ $(document).ready(function() {
         this.fieldName = fieldName;
         this.html = "<select class='select_multiple' multiple='multiple' fieldNum='" + thisFieldLineFields + "' name='" + fieldName + "'>";
         for (optionNumber = 0; optionNumber < this.optionsArray.length; optionNumber++) {
-            this.html += "<option value='" + this.optionsArray[optionNumber].value + "'>" + this.optionsArray[optionNumber].option + "</option>";
+            this.html += "<option value='" + this.optionsArray[optionNumber].value + "' valId='" + this.optionsArray[optionNumber].id + "'>" + this.optionsArray[optionNumber].option + "</option>";
         }
         this.html += "</select>";
     }

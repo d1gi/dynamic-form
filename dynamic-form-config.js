@@ -211,23 +211,28 @@ initializationConditions = '{\
 			"field_name": "tags_array",\
 			"options": [{\
 				"option": "Конфета",\
-				"value": "candy"\
+				"value": "candy",\
+				"id":"1"\
 			},\
 			{\
 				"option": "Козинаки",\
-				"value": "kozinaki"\
+				"value": "kozinaki",\
+				"id":"2"\
 			},\
 			{\
 				"option": "Пирожное",\
-				"value": "brownie"\
+				"value": "brownie",\
+				"id":"3"\
 			},\
 			{\
 				"option": "Печенье",\
-				"value": "cookie"\
+				"value": "cookie",\
+				"id":"4"\
 			},\
 			{\
 				"option": "Ватрушка",\
-				"value": "cheesecake"\
+				"value": "cheesecake",\
+				"id":"5"\
 			}]\
 		}]\
 	},\

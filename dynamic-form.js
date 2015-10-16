@@ -34,6 +34,19 @@ if (formRestoreJson!='' && formRestoreJson!=undefined){
 					}
 					$(this).val(tagElements).trigger("change");
 			}
+			
+			if($(this).hasClass("select_multiple_ajax")){
+					ajaxElements="";
+					for (mselectElement=0;mselectElement<formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value.length;mselectElement++){
+						ajaxElements+='{ id:'+mselectElement+', "text":"'+formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value[mselectElement].element+'"}'+(mselectElement<formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value.length-1?',':'');
+						//ajaxElements=ajaxElements.replace(/%22/g,'"');
+					}
+					//$(this).select2("data", {id:1, label:'NEW VALUE'}).trigger("change");
+					//$(this).select2("data", JSON.parse("["+ajaxElements+"]"));
+					$(this).select2("data", eval("["+ajaxElements+"]"));
+					console.log(ajaxElements);
+			}
+			
 			if($(this).is("input:not(select_multiple, select_multiple_ajax)")){
 				$(this).val(formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value);
 			}
@@ -143,29 +156,29 @@ function selectConditionLine(domElement){
 				$(".lineFields",$(this.domElement).parent(".FieldLineContainer")).append(newFieldLine.html);
 				getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'"}';
 				$("input[name='"+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+"']").select2({
-					placeholder: form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].placeholder, minimumInputLength: 1, multiple: true, id: function(e) { return e.id },
-					width: 200,
+					minimumInputLength: 2, tags: [],
 					ajax: {
 						url: form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].url,
-						dataType: 'json',
-						delay: 250,
-						data: function (params) {
+						dataType: 'json', type: "GET", quietMillis: 50,
+						data: function (term) {
+							return { term: term };
+						},
+						results: function (data) {
 							return {
-								q: params.term,
-								page: params.page
+								results: $.map(data, function (item) {
+									return {
+										text: item.name,
+										id: item.id
+									}
+								})
 							};
 						},
-						processResults: function (data, page) {
-							return {
-								results: data.name
-							};
-						},
-						cache: true
-					},
-					escapeMarkup: function (markup) { return markup; },
-					minimumInputLength: 1,
-					templateResult: function formatResult(data) { return '<div>' + data.name + '</div>'; },
-					templateSelection: function formatSelection(data) { return data.name; }
+						initSelection: function (element, callback) {
+							callback($.map(element.val().split(','), function (id) {
+								return { id: id, name: id };
+							}));
+						}
+					}
 				});
 				break
 		}
@@ -177,11 +190,21 @@ function fieldsChange(domElement){
 	thisFieldLineNumber=parseInt($(this.domElement).parents(".FieldLineContainer").attr("linenum"));
 	thisFieldLineFields=parseInt($(this.domElement).attr("fieldnum"));
 	thisFieldLineType=parseInt($(".selectCondition option:selected",($(this.domElement).parents(".FieldLineContainer"))).attr("FieldLine"));
-	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple"){
+	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple" && form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple_ajax"){
 		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":"'+$(this.domElement).val()+'"}]}';
-	} else {
+	}
+	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type=="select_multiple"){
 		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":[{"element":"'+$(this.domElement).val().toString().replace(/,/g,'"},{"element":"')+'"}]}]}';
 	}
+	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type=="select_multiple_ajax"){
+		ajaxVal="";
+		$(".select2-search-choice>div",$(this.domElement).parents(".lineFields")).each(function(){
+			ajaxVal+='{"element":"'+$(this).text()+'"},';
+		});
+		ajaxVal=ajaxVal.substring(0, ajaxVal.length - 1)
+		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":['+ajaxVal+']}]}';
+	}
+	
 	if($(this.domElement).val().toString()=="date_diapasone" && $(this.domElement).attr("name")=="age_comparison"){
 		initDatePicker(this.domElement);
 		$('input[name="datapicker"]',$(this.domElement).parent(".lineFields")).attr("name","data-range");

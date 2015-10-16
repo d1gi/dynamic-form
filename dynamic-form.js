@@ -92,7 +92,7 @@ $("#search_button").click(function(){
 	getForwarding+=']}';
 	console.log(getForwarding);
 	//Кидаем на сервер
-	//location.href="test.php?json="+getForwarding;
+	location.href="index.php?options="+getForwarding;
 });
 
 //------------------------------------------------------------------------------------------------------------------------------------

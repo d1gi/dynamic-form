@@ -138,7 +138,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="brand" href="#">Dynamic Form</a>
+                <a class="brand" href="/">Dynamic Form</a>
 
                 <div class="nav-collapse collapse">
                     <ul class="nav">

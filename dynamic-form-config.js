@@ -209,31 +209,7 @@ initializationConditions = '{\
 		{\
 			"type": "select_multiple",\
 			"field_name": "tags_array",\
-			"options": [{\
-				"option": "Конфета",\
-				"value": "candy",\
-				"id":"1"\
-			},\
-			{\
-				"option": "Козинаки",\
-				"value": "kozinaki",\
-				"id":"2"\
-			},\
-			{\
-				"option": "Пирожное",\
-				"value": "brownie",\
-				"id":"3"\
-			},\
-			{\
-				"option": "Печенье",\
-				"value": "cookie",\
-				"id":"4"\
-			},\
-			{\
-				"option": "Ватрушка",\
-				"value": "cheesecake",\
-				"id":"5"\
-			}]\
+			"placeholder": "Тэги"\
 		}]\
 	},\
 	{\
@@ -275,6 +251,20 @@ initializationConditions = '{\
 			"type": "inputData",\
 			"field_name": "age_value",\
 			"value": 0\
+		}]\
+	},\
+	{\
+		"FieldLine": [{\
+			"name":"ajax",\
+			"title":"AJAX",\
+			"quantity":1,\
+			"array":false\
+		},\
+		{\
+			"type": "select_multiple_ajax",\
+			"field_name": "tags_ajax",\
+			"placeholder": "AJAX",\
+			"url":"https://api.github.com/search/repositories"\
 		}]\
 	}]\
 }';

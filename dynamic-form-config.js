@@ -264,7 +264,7 @@ initializationConditions = '{\
 			"type": "select_multiple_ajax",\
 			"field_name": "tags_ajax",\
 			"placeholder": "AJAX",\
-			"url":"https://api.github.com/search/repositories"\
+			"url":"http://dynamic-form.msweb.org/domains.json"\
 		}]\
 	}]\
 }';

@@ -252,19 +252,5 @@ initializationConditions = '{\
 			"field_name": "age_value",\
 			"value": 0\
 		}]\
-	},\
-	{\
-		"FieldLine": [{\
-			"name":"ajax",\
-			"title":"AJAX",\
-			"quantity":1,\
-			"array":false\
-		},\
-		{\
-			"type": "select_multiple_ajax",\
-			"field_name": "tags_ajax",\
-			"placeholder": "AJAX",\
-			"url":"/domains.json"\
-		}]\
 	}]\
 }';

@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-form = JSON.parse(initializationConditions); //Парсим в объект
+form = JSON.parse(initializationConditions); //Парсим конфиг в объект
 formLines=[];
 formLinesElement=0;
 getStringArray=[];
@@ -30,30 +30,21 @@ if (formRestoreJson!='' && formRestoreJson!=undefined){
 			if($(this).hasClass("select_multiple")){
 					tagElements=[];
 					for (mselectElement=0;mselectElement<formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value.length;mselectElement++){
-						tagElements[mselectElement]=formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value[mselectElement].element;
+						tagElements[mselectElement]=parseInt(formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value[mselectElement].id);
 					}
 					$(this).val(tagElements).trigger("change");
 			}
-			
-			if($(this).hasClass("select_multiple_ajax")){
-					ajaxElements="";
-					for (mselectElement=0;mselectElement<formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value.length;mselectElement++){
-						ajaxElements+='{ id:'+mselectElement+', "text":"'+formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value[mselectElement].element+'"}'+(mselectElement<formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value.length-1?',':'');
-						//ajaxElements=ajaxElements.replace(/%22/g,'"');
-					}
-					//$(this).select2("data", {id:1, label:'NEW VALUE'}).trigger("change");
-					//$(this).select2("data", JSON.parse("["+ajaxElements+"]"));
-					$(this).select2("data", eval("["+ajaxElements+"]"));
-					console.log(ajaxElements);
-			}
-			
-			if($(this).is("input:not(select_multiple, select_multiple_ajax)")){
+						
+			if($(this).is("input:not(select_multiple)")){
 				$(this).val(formRestore.formarray[restoreElement].FieldLine[formRestoreArrayElement].options[0].value);
 			}
 			formRestoreArrayElement++;
 		});
 		formLinesElement++;
 	}
+	$(".lineFields>select, .lineFields>input").each(function(el){
+		fieldsChange(this);
+	});
 }
 
 //Добавляем по клику строку
@@ -90,13 +81,13 @@ $("#search_button").click(function(){
 		}
 	}
 	getForwarding+=']}';
-	console.log(getForwarding);
+	//console.log(getForwarding);
 	//Кидаем на сервер
-	location.href="index.php?options="+getForwarding;
+	location.href="/?options="+getForwarding;
 });
 
 //------------------------------------------------------------------------------------------------------------------------------------
-
+//Добавляются условия соответственно конфига
 function selectConditionLine(domElement){
 	this.domElement=domElement;
 	$(".lineFields",$(this.domElement).parent(".FieldLineContainer")).remove();
@@ -151,58 +142,20 @@ function selectConditionLine(domElement){
 				$(".lineFields",$(this.domElement).parent(".FieldLineContainer")).append(newFieldLine.html);
 				getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].value+'"}]}';
 				break
-			case "select_multiple_ajax":
-				newFieldLine=new FieldSelectMultipleAJAX(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].options,thisFieldLineFields,form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name);//Объект SelectMultipleAJAX
-				$(".lineFields",$(this.domElement).parent(".FieldLineContainer")).append(newFieldLine.html);
-				getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'"}';
-				$("input[name='"+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+"']").select2({
-					minimumInputLength: 2, tags: [],
-					ajax: {
-						url: form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].url,
-						dataType: 'json', type: "GET", quietMillis: 50,
-						data: function (term) {
-							return { term: term };
-						},
-						results: function (data) {
-							return {
-								results: $.map(data, function (item) {
-									return {
-										text: item.name,
-										id: item.id
-									}
-								})
-							};
-						},
-						initSelection: function (element, callback) {
-							callback($.map(element.val().split(','), function (id) {
-								return { id: id, name: id };
-							}));
-						}
-					}
-				});
-				break
 		}
 	}
 }
-
+//Действия когда меняются значения в полях
 function fieldsChange(domElement){
 	this.domElement=domElement;
 	thisFieldLineNumber=parseInt($(this.domElement).parents(".FieldLineContainer").attr("linenum"));
 	thisFieldLineFields=parseInt($(this.domElement).attr("fieldnum"));
-	thisFieldLineType=parseInt($(".selectCondition option:selected",($(this.domElement).parents(".FieldLineContainer"))).attr("FieldLine"));
-	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple" && form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple_ajax"){
+	thisFieldLineType=parseInt($(".selectCondition option:selected",($(this.domElement).parents(".FieldLineContainer"))).attr("fieldline"));
+	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type!="select_multiple"){
 		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":"'+$(this.domElement).val()+'"}]}';
 	}
 	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type=="select_multiple"){
-		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":[{"element":"'+$(this.domElement).val().toString().replace(/,/g,'"},{"element":"')+'"}]}]}';
-	}
-	if(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].type=="select_multiple_ajax"){
-		ajaxVal="";
-		$(".select2-search-choice>div",$(this.domElement).parents(".lineFields")).each(function(){
-			ajaxVal+='{"element":"'+$(this).text()+'"},';
-		});
-		ajaxVal=ajaxVal.substring(0, ajaxVal.length - 1)
-		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":['+ajaxVal+']}]}';
+		getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":'+JSON.stringify($(this.domElement).select2('data'))+'}]}';
 	}
 	
 	if($(this.domElement).val().toString()=="date_diapasone" && $(this.domElement).attr("name")=="age_comparison"){
@@ -218,6 +171,7 @@ function fieldsChange(domElement){
 	}
 }
 
+//Инициализация
 function initDatePicker(domElement, singleDatePicker){
 	this.singleDatePicker=singleDatePicker;
 	this.singleDatePicker ? true : false;
@@ -296,14 +250,6 @@ function FieldInputNumber(number,thisFieldLineFields,fieldName) {
 	this.fieldName=fieldName;
 	this.thisFieldLineFields=thisFieldLineFields;
 	this.html="<input type='number' value='"+this.number+"' fieldNum='"+thisFieldLineFields+"' name='"+fieldName+"'>";
-}
-
-//Объект SelectMultipleAJAX
-function FieldSelectMultipleAJAX(optionsArray,thisFieldLineFields,fieldName) {
-	this.optionsArray = optionsArray;
-	this.thisFieldLineFields=thisFieldLineFields;
-	this.fieldName=fieldName;
-	this.html="<input type='hidden' class='select_multiple_ajax' fieldNum='"+thisFieldLineFields+"' name='"+fieldName+"'>";
 }
 
 });

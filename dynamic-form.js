@@ -81,7 +81,7 @@ $("#search_button").click(function(){
 		}
 	}
 	getForwarding+=']}';
-	//console.log(getForwarding);
+	console.log(getForwarding);
 	//Кидаем на сервер
 	location.href="/?options="+getForwarding;
 });
@@ -125,7 +125,7 @@ function selectConditionLine(domElement){
 				newFieldLine=new FieldSelectMultiple(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].options,thisFieldLineFields,form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name);//Объект SelectMultiple
 				$(".lineFields",$(this.domElement).parent(".FieldLineContainer")).append(newFieldLine.html);
 				getStringArray[thisFieldLineNumber][thisFieldLineFields]='{"field_name":"'+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+'","options":[{"value":"'+0+'"}]}';
-				$("input[name='"+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+"']").select2({data: eval(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name), multiple: true, placeholder: form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].placeholder});
+				$("input[name='"+form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name+"']",$(this.domElement).parent(".FieldLineContainer")).select2({data: eval(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name), multiple: true, placeholder: form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].placeholder});
 				break
 			case "inputNum":
 				newFieldLine=new FieldInputNumber(form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].value,thisFieldLineFields,form.formarray[thisFieldLineType].FieldLine[thisFieldLineFields].field_name);//Объект InputNumber

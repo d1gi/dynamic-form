@@ -25,4 +25,5 @@ foreach ($stmt as $row) {
     ];
 }
 
+header('Content-Type: application/json');
 echo json_encode($data);

@@ -264,7 +264,7 @@ initializationConditions = '{\
 			"type": "select_multiple_ajax",\
 			"field_name": "tags_ajax",\
 			"placeholder": "AJAX",\
-			"url":"ajax.php"\
+			"url":"ajax_cities.php"\
 		}]\
 	}]\
 }';

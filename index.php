@@ -4,13 +4,9 @@
     <meta charset="utf-8">
     <title>Динамическая форма</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-
-    <link href="assets/select2/select2.css" rel="stylesheet">
-    <link href="assets/select2/select2-bootstrap.css" rel="stylesheet">
+    <link href="assets/select2/css/select2.min.css" rel="stylesheet">
 
     <style type="text/css">
         body {
@@ -112,7 +108,7 @@
     <script src="assets/jquery-1.11.2.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="assets/select2/select2.min.js"></script>
+    <script src="assets/select2/select2.full.min.js"></script>
 
     <script src="assets/bootstrap-daterangepicker/moment.js"></script>
     <script src="assets/bootstrap-daterangepicker/daterangepicker.js"></script>
@@ -124,6 +120,7 @@
 	
 	<script>
         var tags_array = [{id: '2', text: '222'},{id: '7', text: '777'},{id: '4', text: '444'}];
+		var tags_ajax = [{id: '1', text: 'Москва'},{id: '246', text: 'Другой город'}];
 	</script>
 
 </head>
@@ -138,7 +135,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="brand" href="/">Dynamic Form</a>
+                <a class="brand" href="#">Dynamic Form</a>
 
                 <div class="nav-collapse collapse">
                     <ul class="nav">

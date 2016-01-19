@@ -93,7 +93,7 @@ $(document).ready(function(){
 		getForwarding+=']}';
 		console.log(getForwarding);
 		// Кидаем на сервер
-		location.href="/smart/contacts_2/?options="+getForwarding;
+		location.href="/?options="+getForwarding;
 	});
 
 	//------------------------------------------------------------------------------------------------------------------------------------

@@ -119,7 +119,7 @@
     <script src="dynamic-form.js"></script>
 	
 	<script>
-        var tags_array = [{id: '2', text: '222'},{id: '7', text: '777'},{id: '4', text: '444'}];
+        var tags = [{id: '2', text: '222'},{id: '7', text: '777'},{id: '4', text: '444'}];
 		var tags_ajax = [{id: '1', text: 'Москва'},{id: '246', text: 'Другой город'}];
 	</script>
 
